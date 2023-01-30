@@ -3,7 +3,7 @@ import './App.css';
 
 export default function App() {
   const [target, setTarget] = React.useState({});
-  const [dir, setDir] = React.useState("");
+  const [dir, setDir] = React.useState("right");
   const id = React.useRef();
   const [isOver, setIsOver] = React.useState(false);
   const [start, setStart] = React.useState(false);
@@ -22,23 +22,39 @@ export default function App() {
     return arr;
   };
 
+  const setBodyArr = (leftDiff = 0, topDiff = 0) => {
+    setBody((prev) => {
+      const { left, top } = prev[prev.length - 1].props.style;
+      const arr = [
+        ...prev,
+        <div className="head" style={{ top: top + topDiff, left: left + leftDiff }}></div>
+      ];
+      return arr.slice(1);
+    });
+  };
+
   const handleHead = (e) => {
+    // handle left key
     if (e.keyCode === 37) {
       setDir((prev) => prev === "right" ? "right" : "left");
     }
+    // handle top key
     if (e.keyCode === 38) {
       setDir((prev) => prev === "down" ? "down" : "top");
     }
+    // handle right key
     if (e.keyCode === 39) {
       setDir((prev) => prev === "left" ? "left" : "right");
     }
+    // handle down key
     if (e.keyCode === 40) {
       setDir((prev) => prev === "top" ? "top" : "down");
     }
+    // handle space key
     if (e.keyCode === 32) {
       setStart((prev) => !prev);
     }
-  }; 
+  };
 
   React.useEffect(() => {
     document.querySelector("body").addEventListener("keydown", handleHead);
@@ -59,54 +75,28 @@ export default function App() {
     }
 
     if (start) {
-      if(!dir) setDir("right");
       id.current = setTimeout(() => {
         if (dir === "left") {
-          setBody((prev) => {
-            const { left, top } = prev[prev.length - 1].props.style;
-            const arr = [
-              ...prev,
-              <div className="head" style={{ left: left - 20, top: top }}></div>
-            ];
-            return arr.slice(1);
-          });
+          setBodyArr(-20);
         }
         if (dir === "top") {
-          setBody((prev) => {
-            const { left, top } = prev[prev.length - 1].props.style;
-            const arr = [
-              ...prev,
-              <div className="head" style={{ top: top - 20, left: left }}></div>
-            ];
-            return arr.slice(1);
-          });
+          setBodyArr(0, -20);
         }
         if (dir === "right") {
-          setBody((prev) => {
-            const { left, top } = prev[prev.length - 1].props.style;
-            const arr = [
-              ...prev,
-              <div className="head" style={{ left: left + 20, top: top }}></div>
-            ];
-            return arr.slice(1);
-          });
+          setBodyArr(20);
         }
         if (dir === "down") {
-          setBody((prev) => {
-            const { left, top } = prev[prev.length - 1].props.style;
-            const arr = [
-              ...prev,
-              <div className="head" style={{ top: top + 20, left: left }}></div>
-            ];
-            return arr.slice(1);
-          });
+          setBodyArr(0, 20);
         }
       }, 200);
 
       if (body.length) {
+        const lastElLeftPos = body[body.length - 1].props.style.left;
+        const lastElTopPos = body[body.length - 1].props.style.top;
+
         if (
-          body[body.length - 1].props.style.left === target.x &&
-          body[body.length - 1].props.style.top === target.y
+          lastElLeftPos === target.x &&
+          lastElTopPos === target.y
         ) {
           setBody((prev) => {
             const { left, top } = prev[prev.length - 1].props.style;
@@ -121,14 +111,15 @@ export default function App() {
             const [x, y] = genDot();
             return { ...prev, x: x * 20, y: y * 20 };
           });
-          setScore(score+10)
+
+          setScore(score + 10);
         }
 
         if (
-          body[body.length - 1].props.style.left === -20 ||
-          body[body.length - 1].props.style.left === 300 ||
-          body[body.length - 1].props.style.top === -20 ||
-          body[body.length - 1].props.style.top === 300
+          lastElLeftPos === -20 ||
+          lastElLeftPos === 300 ||
+          lastElTopPos === -20 ||
+          lastElTopPos === 300
         ) {
           setIsOver(true);
           clearTimeout(id.current);
