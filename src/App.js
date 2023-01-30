@@ -7,8 +7,8 @@ export default function App() {
   const id = React.useRef();
   const [isOver, setIsOver] = React.useState(false);
   const [start, setStart] = React.useState(false);
-
   const [body, setBody] = React.useState([]);
+  const [score, setScore] = React.useState(0);
 
   const genDot = () => {
     const arr = [];
@@ -24,21 +24,18 @@ export default function App() {
 
   const handleHead = (e) => {
     if (e.keyCode === 37) {
-      setDir("left");
+      setDir((prev) => prev === "right" ? "right" : "left");
     }
     if (e.keyCode === 38) {
-      setDir("top");
+      setDir((prev) => prev === "down" ? "down" : "top");
     }
     if (e.keyCode === 39) {
-      setDir("right");
+      setDir((prev) => prev === "left" ? "left" : "right");
     }
     if (e.keyCode === 40) {
-      setDir("down");
+      setDir((prev) => prev === "top" ? "top" : "down");
     }
     if (e.keyCode === 32) {
-      if (!dir) {
-        setDir("right");
-      }
       setStart((prev) => !prev);
     }
   }; 
@@ -62,6 +59,7 @@ export default function App() {
     }
 
     if (start) {
+      if(!dir) setDir("right");
       id.current = setTimeout(() => {
         if (dir === "left") {
           setBody((prev) => {
@@ -123,6 +121,7 @@ export default function App() {
             const [x, y] = genDot();
             return { ...prev, x: x * 20, y: y * 20 };
           });
+          setScore(score+10)
         }
 
         if (
@@ -132,6 +131,8 @@ export default function App() {
           body[body.length - 1].props.style.top === 300
         ) {
           setIsOver(true);
+          clearTimeout(id.current);
+          id.current = null;
         }
       }
     }
@@ -140,8 +141,10 @@ export default function App() {
   return (
     <div className="App">
       <div className="game-area">
-        {isOver ? <h3>Looser</h3> : body}
+        {isOver && <h3>Looser</h3>}
+        {body}
         <div className="target" style={{ left: target.x, top: target.y }}></div>
+        <div className="score">Score {score}</div>
       </div>
       <div>Press "space" to start/pause</div>
     </div>

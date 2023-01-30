@@ -28,3 +28,9 @@ h3 {
   align-items: center;
   text-align: center;
 }
+.score {
+  position: absolute;
+  top: 280px;
+  left: 200px;
+  opacity: 0.5;
+}
