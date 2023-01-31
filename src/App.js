@@ -11,6 +11,22 @@ export default function App() {
   const [body, setBody] = React.useState([]);
   const [score, setScore] = React.useState(0);
 
+  const snakeAteItself = React.useMemo(() => {
+    let ateItself = false;
+    const head = {
+      left: body[body.length - 1]?.props.style.left,
+      top: body[body.length - 1]?.props.style.top
+    };
+    if (body.length > 1) {
+      body.slice(0, body.length - 2).forEach((el) => {
+        if (el.props.style.left === head.left && el.props.style.top === head.top) {
+          ateItself = true;
+        };
+      });
+    }
+    return ateItself;
+  }, [body]);
+
   const genDot = () => {
     const arr = [];
     const genRandom = (limit) => {
@@ -23,14 +39,14 @@ export default function App() {
     return arr;
   };
 
-  const setBodyArr = (leftDiff = 0, topDiff = 0) => {
+  const setBodyArr = (leftDiff = 0, topDiff = 0, removeFirst = true) => {
     setBody((prev) => {
       const { left, top } = prev[prev.length - 1].props.style;
       const arr = [
         ...prev,
         <div className="head" style={{ top: top + topDiff, left: left + leftDiff }}></div>
       ];
-      return arr.slice(1);
+      return removeFirst ? arr.slice(1) : arr;
     });
   };
 
@@ -58,15 +74,10 @@ export default function App() {
   };
 
   React.useEffect(() => {
+    const [x, y] = genDot();
     document.querySelector("body").addEventListener("keydown", handleHead);
-    setBody([
-      ...body,
-      <div className="head" style={{ left: 0, top: 0 }}></div>
-    ]);
-    setTarget((prev) => {
-      const [x, y] = genDot();
-      return { ...prev, x: x * 20, y: y * 20 };
-    });
+    setBody([<div className="head" style={{ left: 0, top: 0 }}></div>]);
+    setTarget({ x: x * 20, y: y * 20 });
   }, []);
 
   React.useEffect(() => {
@@ -94,19 +105,17 @@ export default function App() {
       if (body.length) {
         const lastElLeftPos = body[body.length - 1].props.style.left;
         const lastElTopPos = body[body.length - 1].props.style.top;
+        const gameOver = lastElLeftPos === -20 ||
+          lastElLeftPos === 300 ||
+          lastElTopPos === -20 ||
+          lastElTopPos === 300 ||
+          snakeAteItself
 
         if (
           lastElLeftPos === target.x &&
           lastElTopPos === target.y
         ) {
-          setBody((prev) => {
-            const { left, top } = prev[prev.length - 1].props.style;
-            const arr = [
-              ...prev,
-              <div className="head" style={{ left: left, top: top }}></div>
-            ];
-            return arr;
-          });
+          setBodyArr(0, 0, false);
 
           setTarget((prev) => {
             const [x, y] = genDot();
@@ -116,12 +125,7 @@ export default function App() {
           setScore(score + 10);
         }
 
-        if (
-          lastElLeftPos === -20 ||
-          lastElLeftPos === 300 ||
-          lastElTopPos === -20 ||
-          lastElTopPos === 300
-        ) {
+        if (gameOver) {
           setIsOver(true);
           clearTimeout(id.current);
           id.current = null;
@@ -142,4 +146,3 @@ export default function App() {
     </div>
   );
 }
-

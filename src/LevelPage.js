@@ -5,7 +5,7 @@ import "./App.css"
 const LevelPage = () => {
     return (
         <div className="game-area">
-
+            
         </div>
     );
 };
