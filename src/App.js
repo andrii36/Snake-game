@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import LevelPage from './LevelPage';
 
 export default function App() {
   const [target, setTarget] = React.useState({});
