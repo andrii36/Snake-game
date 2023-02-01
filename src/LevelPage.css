@@ -1,0 +1,15 @@
+.button-group {
+    margin-top: 20px;
+    padding: 20px;
+ }
+.button {
+    display: block;
+    margin: 10px auto;
+    height: 30px;
+    width: 120px;
+    background-color: rgba(226, 21, 21, 0.8);
+    border-radius: 10px;
+    font-size: 19px;
+    color: white;
+    cursor: pointer;
+}
