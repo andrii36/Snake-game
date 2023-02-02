@@ -35,6 +35,7 @@ const GameComponent = ({level}) => {
     }, [body]);
 
     const genDot = () => {
+        console.log('genDot')
         const arr = [];
         const genRandom = (limit) => {
             let rand = Math.random();
