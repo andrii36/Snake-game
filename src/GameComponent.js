@@ -18,6 +18,7 @@ const GameComponent = ({level}) => {
     }
 
     const snakeAteItself = React.useMemo(() => {
+        console.log("new line")
         let ateItself = false;
         const head = {
             left: body[body.length - 1]?.props.style.left,
