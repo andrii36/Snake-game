@@ -10,7 +10,7 @@ const GameComponent = ({level}) => {
     const [score, setScore] = React.useState(0);
 
     const validateLevelTime = () => {
-        console.log('andrii change');
+        console.log("hi")
         switch(level){
             case 'Easy': return 500;
             case 'Medium': return 350;
