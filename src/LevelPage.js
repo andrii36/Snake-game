@@ -9,7 +9,7 @@ const LevelPage = ({showGameComponent}) => {
     };
 
     return (
-        <div className="game-area">
+        <div data-testid='level_page_wrapper' className="game-area">
             <h3>Level</h3>
             <div className="button-group">
                 <button className="button" onClick={handleClick}>Easy</button>
