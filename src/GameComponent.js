@@ -10,7 +10,6 @@ const GameComponent = ({level}) => {
     const [score, setScore] = React.useState(0);
 
     const validateLevelTime = () => {
-        console.log("hi")
         switch(level){
             case 'Easy': return 500;
             case 'Medium': return 350;
@@ -35,7 +34,6 @@ const GameComponent = ({level}) => {
     }, [body]);
 
     const genDot = () => {
-        console.log('genDot')
         const arr = [];
         const genRandom = (limit) => {
             let rand = Math.random();
