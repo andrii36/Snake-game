@@ -10,7 +10,6 @@ const GameComponent = ({level}) => {
     const [score, setScore] = React.useState(0);
 
     const validateLevelTime = () => {
-        console.log("hi")
         switch(level){
             case 'Easy': return 500;
             case 'Medium': return 350;
@@ -19,6 +18,7 @@ const GameComponent = ({level}) => {
     }
 
     const snakeAteItself = React.useMemo(() => {
+        console.log("new line")
         let ateItself = false;
         const head = {
             left: body[body.length - 1]?.props.style.left,
