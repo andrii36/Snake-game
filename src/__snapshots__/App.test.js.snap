@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders learn react link 1`] = `
+<DocumentFragment>
+  <div
+    class="App"
+    data-testid="app-wrapper"
+  >
+    <div
+      class="game-area"
+      data-testid="level_page_wrapper"
+    >
+      <h3>
+        Level
+      </h3>
+      <div
+        class="button-group"
+      >
+        <button
+          class="button"
+        >
+          Easy
+        </button>
+        <button
+          class="button"
+        >
+          Medium
+        </button>
+        <button
+          class="button"
+        >
+          Hard
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
